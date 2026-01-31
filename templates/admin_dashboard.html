@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Elite Gym Admin</title>
+    <link rel="stylesheet" href="{% static 'css/admin-dashboard.css' %}">
+</head>
+
+<body>
+
+    <div class="sidebar">
+        <h2>🏋 Elite Gym</h2>
+
+        <a href="/admin/memberships/trainee/">Trainees</a>
+        <a href="/admin/memberships/trainer/">Trainers</a>
+        <a href="/admin/memberships/appointment/">Appointments</a>
+        <a href="/admin/memberships/membership/">Memberships</a>
+        <a href="/admin/memberships/billing/">Billing</a>
+        <a href="/admin/memberships/dietplan/">Diet Plans</a>
+        <a href="/admin/memberships/workoutplan/">Workout Plans</a>
+        <a href="/admin/">Full Admin Panel</a>
+    </div>
+
+    <div class="main">
+
+        <div class="topbar">
+            <h1>Admin Dashboard</h1>
+            <a href="{% url 'logout' %}" class="logout">Logout</a>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats">
+
+            <div class="card">
+                <h2>{{ total_trainees }}</h2>
+                <p>Total Trainees</p>
+            </div>
+
+            <div class="card">
+                <h2>{{ total_trainers }}</h2>
+                <p>Total Trainers</p>
+            </div>
+
+            <div class="card">
+                <h2>{{ active_memberships }}</h2>
+                <p>Active Memberships</p>
+            </div>
+
+            <div class="card">
+                <h2>{{ pending_appointments }}</h2>
+                <p>Pending Appointments</p>
+            </div>
+
+            <div class="card highlight">
+                <h2>₹{{ monthly_revenue }}</h2>
+                <p>This Month Revenue</p>
+            </div>
+
+        </div>
+
+        <!-- Recent Appointments Table -->
+        <div class="table-section">
+            <h3>Recent Appointments</h3>
+            <table>
+                <tr>
+                    <th>Trainee</th>
+                    <th>Trainer</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                </tr>
+
+                {% for appointment in recent_appointments %}
+                <tr>
+                    <td>{{ appointment.trainee.user.username }}</td>
+                    <td>{{ appointment.trainer.user.username }}</td>
+                    <td>{{ appointment.appointment_date }}</td>
+                    <td>{{ appointment.status }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+
+{% block title %}Trainee Dashboard | Smart Gym{% endblock %}
+
+{% block content %}
+<div class="dashboard-wrapper">
+
+    <section class="dashboard-header">
+        <div>
+            <h2>Welcome back, {{ trainee.user.first_name|default:trainee.user.username }} 👋</h2>
+            <p>Your personalized Smart Gym dashboard</p>
+        </div>
+        {% if active_membership %}
+        <div class="membership-pill membership-pill-{{ active_membership.membership_type }}">
+            <span class="label">Active Membership</span>
+            <span class="type">{{ active_membership.get_membership_type_display }}</span>
+            <span class="dates">
+                {{ active_membership.start_date }} – {{ active_membership.end_date }}
+            </span>
+        </div>
+        {% else %}
+        <div class="membership-pill membership-pill-none">
+            <span>No active membership</span>
+        </div>
+        {% endif %}
+    </section>
+
+    <section class="dashboard-grid">
+
+        <!-- LEFT COLUMN -->
+        <div class="dashboard-column">
+
+            <!-- Membership selection -->
+            {% if not active_membership %}
+            <div class="card">
+                <h3>Choose Your Membership</h3>
+                <p>Select a plan and duration to get started.</p>
+                <form method="post" class="form-vertical">
+                    {% csrf_token %}
+                    {{ membership_form.non_field_errors }}
+
+                    <div class="form-group">
+                        <label>Membership Type</label>
+                        {{ membership_form.membership_type }}
+                    </div>
+
+                    <div class="form-group">
+                        <label>Duration</label>
+                        {{ membership_form.duration_months }}
+                    </div>
+
+                    <button type="submit" name="select_membership" class="btn-primary">
+                        Confirm Membership
+                    </button>
+                </form>
+            </div>
+
+            {% elif active_membership and not active_membership.trainer %}
+            <!-- Trainer selection -->
+            <div class="card">
+                <h3>Select Your Trainer</h3>
+                <p>Pick a trainer to unlock your personalized workouts.</p>
+                <form method="post" class="form-vertical">
+                    {% csrf_token %}
+                    {{ trainer_form.non_field_errors }}
+
+                    <div class="form-group">
+                        <label>Available Trainers</label>
+                        {{ trainer_form.trainer }}
+                    </div>
+
+                    <button type="submit" name="select_trainer" class="btn-primary">
+                        Assign Trainer
+                    </button>
+                </form>
+            </div>
+            {% else %}
+            <!-- Membership summary -->
+            <div class="card">
+                <h3>Membership Summary</h3>
+                <div class="membership-summary">
+                    <div>
+                        <span class="label">Plan</span>
+                        <p>{{ active_membership.get_membership_type_display }}</p>
+                    </div>
+                    <div>
+                        <span class="label">Trainer</span>
+                        <p>
+                            {% if active_membership.trainer %}
+                            {{ active_membership.trainer.user.get_full_name|default:active_membership.trainer.user.username }}
+                            {% else %}
+                                Not assigned
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div>
+                        <span class="label">Amount</span>
+                        <p>₹ {{ active_membership.amount }}</p>
+                    </div>
+                    <div>
+                        <span class="label">Valid Till</span>
+                        <p>{{ active_membership.end_date }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Diet Plans -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Diet Plans</h3>
+                </div>
+                {% if diet_plans %}
+                <ul class="plan-list">
+                    {% for plan in diet_plans %}
+                    <li>
+                        <div class="plan-meta">
+                            <span class="plan-date">{{ plan.created_at|date:"M d, Y" }}</span>
+                        </div>
+                        <p class="plan-text">{{ plan.plan_details|linebreaksbr }}</p>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="muted">No diet plans assigned yet.</p>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="dashboard-column">
+
+            <!-- Upcoming appointments -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Upcoming Appointments</h3>
+                </div>
+                {% if upcoming_appointments %}
+                <ul class="appointment-list">
+                    {% for appt in upcoming_appointments %}
+                    <li>
+                        <div class="appt-main">
+                            <span class="appt-date">{{ appt.appointment_date|date:"M d, Y" }}</span>
+                            <span class="appt-time">{{ appt.appointment_date|time:"H:i" }}</span>
+                        </div>
+                        <div class="appt-sub">
+                            <span>Trainer: {{ appt.trainer.user.get_full_name|default:appt.trainer.user.username }}</span>
+                            <span class="status status-{{ appt.status|lower }}">
+                                {{ appt.status }}
+                            </span>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="muted">No upcoming appointments scheduled.</p>
+                {% endif %}
+            </div>
+
+            <!-- Past appointments -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Past Appointments</h3>
+                </div>
+                {% if past_appointments %}
+                <ul class="appointment-list appointment-list-past">
+                    {% for appt in past_appointments|slice:":5" %}
+                    <li>
+                        <div class="appt-main">
+                            <span class="appt-date">{{ appt.appointment_date|date:"M d, Y" }}</span>
+                        </div>
+                        <div class="appt-sub">
+                            <span>Trainer: {{ appt.trainer.user.get_full_name|default:appt.trainer.user.username }}</span>
+                            <span class="status status-{{ appt.status|lower }}">
+                                {{ appt.status }}
+                            </span>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="muted">No past appointments yet.</p>
+                {% endif %}
+            </div>
+
+            <!-- Workout plans -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Workout Plans</h3>
+                </div>
+                {% if workout_plans %}
+                <ul class="plan-list">
+                    {% for plan in workout_plans %}
+                    <li>
+                        <div class="plan-meta">
+                            <span class="plan-date">{{ plan.created_at|date:"M d, Y" }}</span>
+                        </div>
+                        <p class="plan-text">{{ plan.plan_details|linebreaksbr }}</p>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="muted">No workout plans assigned yet.</p>
+                {% endif %}
+            </div>
+
+        </div>
+    </section>
+</div>
+{% endblock %}

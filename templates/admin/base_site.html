@@ -1,0 +1,21 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}Elite Gym Admin{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'admin/css/gym-admin.css' %}">
+{% endblock %}
+
+{% block extrahead %}
+{{ block.super }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'admin/js/gym-admin.js' %}"></script>
+{% endblock %}
+
+{% block branding %}
+<div class="gym-branding">
+    <h1>🏋️ ELITE FITNESS ADMIN</h1>
+</div>
+{% endblock %}

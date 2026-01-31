@@ -1,0 +1,342 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Register as Trainer | Smart Gym{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* ========== AUTH / REGISTER PAGES ========== */
+    .auth-section {
+        min-height: calc(100vh - 70px);
+        padding: 80px 20px 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(circle at top, #1a1a1a 0, #050509 60%, #000 100%);
+    }
+
+    .auth-card {
+        width: 100%;
+        max-width: 1100px;
+        display: grid;
+        grid-template-columns: 1.1fr 1.3fr;
+        gap: 40px;
+        padding: 35px 40px;
+        border-radius: 20px;
+        background: linear-gradient(135deg, rgba(255,46,99,0.12), rgba(0,0,0,0.9));
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+        border: 1px solid rgba(255,255,255,0.06);
+        backdrop-filter: blur(16px);
+    }
+
+    .auth-card-left {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .auth-title {
+        font-size: 1.9rem;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .auth-title span {
+        color: #ff2e63;
+    }
+
+    .auth-subtitle {
+        font-size: 0.95rem;
+        color: #cccccc;
+        line-height: 1.6;
+        margin-bottom: 18px;
+    }
+
+    .auth-highlights {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        font-size: 0.9rem;
+        color: #e0e0e0;
+    }
+
+    .auth-highlights li {
+        margin-bottom: 8px;
+        opacity: 0.9;
+    }
+
+    .auth-card-right {
+        background: rgba(0, 0, 0, 0.55);
+        border-radius: 16px;
+        padding: 20px 22px;
+        border: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .auth-messages {
+        margin-bottom: 12px;
+    }
+
+    .auth-message {
+        font-size: 0.85rem;
+        padding: 8px 10px;
+        border-radius: 8px;
+        margin-bottom: 6px;
+    }
+
+    .auth-message.error {
+        background: rgba(255, 59, 59, 0.12);
+        border: 1px solid rgba(255, 59, 59, 0.6);
+        color: #ff6b6b;
+    }
+
+    .auth-message.success {
+        background: rgba(46, 213, 115, 0.12);
+        border: 1px solid rgba(46, 213, 115, 0.6);
+        color: #2ed573;
+    }
+
+    .auth-form {
+        width: 100%;
+    }
+
+    .auth-form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px 16px;
+        margin-bottom: 18px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .form-group-full {
+        grid-column: 1 / -1;
+    }
+
+    .form-group label {
+        font-size: 0.85rem;
+        color: #e0e0e0;
+    }
+
+    .form-group label span {
+        color: #ff2e63;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        background: rgba(0,0,0,0.7);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 10px;
+        padding: 9px 11px;
+        font-size: 0.9rem;
+        color: #f5f5f5;
+        outline: none;
+        transition: border 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .form-group input::placeholder {
+        color: rgba(255,255,255,0.4);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        border-color: #ff2e63;
+        box-shadow: 0 0 0 1px rgba(255,46,99,0.4);
+        background: rgba(0,0,0,0.9);
+    }
+
+    .form-hint {
+        font-size: 0.75rem;
+        color: rgba(255,255,255,0.6);
+        margin-top: 2px;
+    }
+
+    .btn-primary.auth-submit-btn {
+        width: 100%;
+        margin-top: 4px;
+        padding: 11px 0;
+        border-radius: 999px;
+        border: none;
+        font-size: 0.98rem;
+        font-weight: 600;
+        cursor: pointer;
+        background: linear-gradient(135deg, #ff2e63, #ff7a5c);
+        color: #fff;
+        letter-spacing: 0.03em;
+        transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+    }
+
+    .btn-primary.auth-submit-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 12px 20px rgba(255,46,99,0.35);
+        opacity: 0.96;
+    }
+
+    .auth-footer-text {
+        margin-top: 10px;
+        font-size: 0.85rem;
+        text-align: center;
+        color: #cccccc;
+    }
+
+    .auth-footer-text a {
+        color: #ff2e63;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .auth-footer-text a:hover {
+        text-decoration: underline;
+    }
+
+    /* Mobile */
+    @media (max-width: 900px) {
+        .auth-card {
+            grid-template-columns: 1fr;
+            padding: 25px 20px;
+        }
+
+        .auth-card-left {
+            text-align: center;
+        }
+
+        .auth-highlights {
+            text-align: left;
+            display: inline-block;
+            margin: 0 auto;
+        }
+
+        .auth-form-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="auth-section">
+    <div class="auth-card">
+        <div class="auth-card-left">
+            <h2 class="auth-title">Join <span>Smart Gym</span> as a Trainer</h2>
+            <p class="auth-subtitle">
+                Become part of our elite coaching team. Create personalized workout and diet plans,
+                manage your clients, and grow your fitness career.
+            </p>
+
+            <ul class="auth-highlights">
+                <li>✔ Manage your client list</li>
+                <li>✔ Create workout & diet plans</li>
+                <li>✔ Flexible schedule & appointments</li>
+                <li>✔ Premium trainer dashboard</li>
+            </ul>
+        </div>
+
+        <div class="auth-card-right">
+            {% if messages %}
+            <div class="auth-messages">
+                {% for message in messages %}
+                <p class="auth-message {{ message.tags }}">{{ message }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% if error_message %}
+            <div class="auth-messages">
+                <p class="auth-message error">{{ error_message }}</p>
+            </div>
+            {% endif %}
+
+            {% if success_message %}
+            <div class="auth-messages">
+                <p class="auth-message success">{{ success_message }}</p>
+            </div>
+            {% endif %}
+
+            <form method="post" action="{% url 'register_trainer' %}" enctype="multipart/form-data" class="auth-form">
+                {% csrf_token %}
+
+                <div class="auth-form-grid">
+                    <!-- BASIC ACCOUNT INFO -->
+                    <div class="form-group">
+                        <label for="username">Username<span>*</span></label>
+                        <input type="text" id="username" name="username" required placeholder="trainer_john">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="first_name">First Name<span>*</span></label>
+                        <input type="text" id="first_name" name="first_name" required placeholder="John">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="last_name">Last Name<span>*</span></label>
+                        <input type="text" id="last_name" name="last_name" required placeholder="Doe">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email<span>*</span></label>
+                        <input type="email" id="email" name="email" required placeholder="john.doe@example.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password<span>*</span></label>
+                        <input type="password" id="password" name="password" required placeholder="Enter password">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password_confirm">Confirm Password<span>*</span></label>
+                        <input type="password" id="password_confirm" name="password_confirm" required
+                            placeholder="Confirm password">
+                    </div>
+
+                    <!-- TRAINER PROFILE INFO -->
+                    <div class="form-group">
+                        <label for="phone_number">Phone Number<span>*</span></label>
+                        <input type="text" id="phone_number" name="phone_number" required placeholder="+91 98765 43210">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dob">Date of Birth</label>
+                        <input type="date" id="dob" name="dob">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gender">Gender</label>
+                        <select id="gender" name="gender">
+                            <option value="" selected>Prefer not to say</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group form-group-full">
+                        <label for="specialization">Specialization<span>*</span></label>
+                        <input type="text" id="specialization" name="specialization" required
+                            placeholder="Strength training, Weight loss, CrossFit, etc.">
+                    </div>
+
+                    <div class="form-group form-group-full">
+                        <label for="profile_pic">Profile Picture</label>
+                        <input type="file" id="profile_pic" name="profile_pic" accept="image/*">
+                        <small class="form-hint">Upload a clear professional photo (PNG/JPG)</small>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary auth-submit-btn">
+                    Create Trainer Account
+                </button>
+
+                <p class="auth-footer-text">
+                    Already a trainer? <a href="{% url 'login' %}">Login here</a>.
+                </p>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

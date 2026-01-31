@@ -1,0 +1,253 @@
+{% extends 'base.html' %}
+
+{% block title %}About Us | Smart Gym{% endblock %}
+
+{% block content %}
+
+<!-- ABOUT HERO -->
+<section class="about-hero">
+    <div class="about-hero-inner">
+        <div>
+            <div class="about-badge">
+                <span></span>
+                Smart training • Real results
+            </div>
+
+            <h1 class="about-title">We are your premium <br>smart training destination.</h1>
+            <p class="about-subtitle">
+                SmartGym combines world-class equipment, certified trainers, and intelligent
+                workout tracking to help you train smarter, recover better, and stay consistent.
+            </p>
+
+            <div class="about-cta">
+                <a href="{% url 'membership_plans' %}" class="btn-primary">
+                    View Membership Plans
+                </a>
+                <a href="{% url 'trainer_list' %}" class="btn-ghost">
+                    Meet Our Trainers
+                </a>
+            </div>
+
+            <div class="about-stats">
+                <div class="about-stat">
+                    <div class="about-stat-number">10k+</div>
+                    <div class="about-stat-label">Sessions Completed</div>
+                </div>
+                <div class="about-stat">
+                    <div class="about-stat-number">4.9★</div>
+                    <div class="about-stat-label">Member Rating</div>
+                </div>
+                <div class="about-stat">
+                    <div class="about-stat-number">25+</div>
+                    <div class="about-stat-label">Expert Trainers</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="about-hero-media">
+            <div class="about-card">
+                <div class="about-card-image">
+                    <div class="about-card-gradient"></div>
+                    <div class="about-card-badge">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                        Smart strength • Cardio • Recovery
+                    </div>
+                    <div class="about-card-floating">
+                        <div style="font-weight:600;">Live Performance Tracking</div>
+                        <div style="font-size:11px;color:#b0b0c0;">
+                            Heart rate • Calories • Progress
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ABOUT BODY -->
+<section class="section">
+    <div class="section-inner">
+        <div class="about-main-grid">
+            <div>
+                <h2 class="section-title">Why SmartGym?</h2>
+                <p class="section-subtext">
+                    We’re more than just a gym. SmartGym is a performance-driven training space built for
+                    busy people who want maximum results in minimum time. Every workout,
+                    program, and trainer interaction is designed to fit your goals and your schedule.
+                </p>
+                <p class="section-subtext">
+                    From strength and conditioning to functional training and recovery,
+                    our coaches guide you with science-backed routines, while our smart systems
+                    keep track of your progress automatically.
+                </p>
+
+                <ul class="about-list">
+                    <li>
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>AI-assisted workout planning tailored to your goals and training history.</span>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>Smart tracking for sets, reps, calories burned, and heart rate during sessions.</span>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>Dedicated zones for strength, HIIT, functional training, and recovery.</span>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>Flexible membership options for students, professionals, and families.</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="about-image-card">
+                <div class="about-image-main"></div>
+                <div class="about-image-note">
+                    Open 5 AM – 11 PM • 7 Days a Week
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SERVICES SECTION -->
+<section class="section">
+    <div class="section-inner">
+        <h2 class="section-title">What We Offer</h2>
+        <p class="section-subtext">
+            Whether you're just starting or chasing your next personal record,
+            our services are built to support every step of your fitness journey.
+        </p>
+
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fa-solid fa-dumbbell"></i>
+                </div>
+                <h3 class="service-title">Strength & Conditioning</h3>
+                <p class="service-text">
+                    Progressive lifting programs designed to build strength, muscle, and confidence,
+                    with close supervision from our certified trainers.
+                </p>
+                <div class="service-tag">Performance</div>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <h3 class="service-title">HIIT & Fat Loss</h3>
+                <p class="service-text">
+                    High-intensity group and personal sessions focused on fat loss, endurance, and
+                    metabolic conditioning for fast, visible results.
+                </p>
+                <div class="service-tag">Intense</div>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fa-solid fa-heart"></i>
+                </div>
+                <h3 class="service-title">Cardio & Endurance</h3>
+                <p class="service-text">
+                    Smart cardio zones with treadmills, bikes, rowers, and live tracking to keep every
+                    session purposeful and measurable.
+                </p>
+                <div class="service-tag">Endurance</div>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fa-solid fa-person-running"></i>
+                </div>
+                <h3 class="service-title">Functional Training</h3>
+                <p class="service-text">
+                    Mobility, stability, and functional strength programs to help you move better in and
+                    out of the gym.
+                </p>
+                <div class="service-tag">Athletic</div>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fa-solid fa-spa"></i>
+                </div>
+                <h3 class="service-title">Recovery & Mobility</h3>
+                <p class="service-text">
+                    Guided stretching, foam rolling, and recovery tools so you can bounce back stronger
+                    after every session.
+                </p>
+                <div class="service-tag">Recovery</div>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fa-solid fa-apple-whole"></i>
+                </div>
+                <h3 class="service-title">Nutrition Guidance</h3>
+                <p class="service-text">
+                    Basic nutrition coaching and habit-building tips to support fat loss, muscle gain,
+                    and long-term health.
+                </p>
+                <div class="service-tag">Lifestyle</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- MEET OUR TRAINERS (DEMO SECTION) -->
+<section class="trainers-section">
+    <div class="trainers-inner">
+        <div class="trainers-header">
+            <div>
+                <h2>Meet Our Trainers</h2>
+                <p>
+                    Our certified coaches bring experience from strength sports, functional fitness,
+                    and athletic performance — all focused on helping you get results safely.
+                </p>
+            </div>
+            <div>
+                <!-- Link to trainers page -->
+                <a href="{% url 'trainer_list' %}" class="btn-primary">
+                    View All Trainers
+                </a>
+            </div>
+        </div>
+
+        <!-- Demo trainers -->
+        <div class="trainers-grid">
+            <div class="trainer-card">
+                <div class="trainer-avatar"></div>
+                <div class="trainer-name">Rahul Mehta</div>
+                <div class="trainer-role">Strength Coach</div>
+                <p class="trainer-bio">
+                    Specializes in powerlifting and strength building with a focus on safe, progressive overload.
+                </p>
+                <div class="trainer-meta">8+ years experience • NSCA-CPT</div>
+            </div>
+
+            <div class="trainer-card">
+                <div class="trainer-avatar"></div>
+                <div class="trainer-name">Ananya Iyer</div>
+                <div class="trainer-role">Fat Loss & HIIT</div>
+                <p class="trainer-bio">
+                    Creates fast-paced, high-energy sessions tailored for busy professionals who want maximum burn.
+                </p>
+                <div class="trainer-meta">5+ years experience • ACE Certified</div>
+            </div>
+
+            <div class="trainer-card">
+                <div class="trainer-avatar"></div>
+                <div class="trainer-name">Vikram Singh</div>
+                <div class="trainer-role">Functional & Mobility</div>
+                <p class="trainer-bio">
+                    Helps you move, feel, and perform better with functional training and mobility-focused programs.
+                </p>
+                <div class="trainer-meta">7+ years experience • Functional Specialist</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

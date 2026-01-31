@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Login | Smart Gym{% endblock %}
+
+{% block content %}
+
+<section class="auth-section">
+    <div class="auth-card">
+        <h2 class="auth-title">Welcome Back</h2>
+        <p class="auth-subtitle">Login to continue your fitness journey</p>
+
+        <form method="POST" class="auth-form">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" name="username" placeholder="Enter username" required>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Enter password" required>
+            </div>
+
+            <button type="submit" class="auth-btn">Login</button>
+
+            {% if form.errors %}
+            <div class="auth-error">
+                Invalid username or password. Please try again.
+            </div>
+            {% endif %}
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="auth-error">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </form>
+
+        <p class="auth-switch">
+            Don't have an account?
+            <a href="{% url 'register_trainee' %}">Register here</a>
+        </p>
+    </div>
+</section>
+
+{% endblock %}

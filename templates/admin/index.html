@@ -1,0 +1,33 @@
+{% extends "admin/index.html" %}
+
+{% block content %}
+
+<div class="dashboard-stats">
+    <div class="stat-card">
+        <h2>120</h2>
+        <p>Total Members</p>
+    </div>
+
+    <div class="stat-card">
+        <h2>8</h2>
+        <p>Active Trainers</p>
+    </div>
+
+    <div class="stat-card">
+        <h2>5</h2>
+        <p>Membership Plans</p>
+    </div>
+
+    <div class="stat-card">
+        <h2>₹85,000</h2>
+        <p>Monthly Revenue</p>
+    </div>
+</div>
+
+<div class="chart-wrapper">
+    <canvas id="gymChart"></canvas>
+</div>
+
+{{ block.super }}
+
+{% endblock %}

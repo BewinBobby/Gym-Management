@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Book Appointment | Smart Gym{% endblock %}
+
+{% block content %}
+<section class="page-section">
+    <div class="container">
+        <div class="page-header">
+            <h1>Book a <span>Training Session</span></h1>
+            <p>Pick a date & time – we’ll show you trainers who are free in that slot.</p>
+        </div>
+
+        {% if messages %}
+        <div class="alert-container">
+            {% for message in messages %}
+            <div class="alert {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="two-column">
+            <div class="card info-card">
+                <h2>How it works</h2>
+                <ol class="step-list">
+                    <li>Select a preferred date & time.</li>
+                    <li>Click <strong>Check Availability</strong> to see free trainers.</li>
+                    <li>Choose a trainer and confirm your booking.</li>
+                </ol>
+
+                <div class="tip-box">
+                    <h3>Tips</h3>
+                    <p>Try flexible slots (morning / afternoon / evening) for more trainer options.</p>
+                </div>
+            </div>
+
+            <div class="card form-card">
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="form-grid">
+                        <div class="form-row">
+                            <label for="date">Date</label>
+                            <input type="date" id="date" name="date" value="{{ selected_date }}" required>
+                        </div>
+
+                        <div class="form-row">
+                            <label for="time">Time</label>
+                            <input type="time" id="time" name="time" value="{{ selected_time }}" required>
+                            <small class="field-hint">Use 24-hour format · Example: 07:00, 18:30</small>
+                        </div>
+                    </div>
+
+                    {% if available_trainers %}
+                    <div class="divider"></div>
+
+                    <div class="form-row">
+                        <label for="trainer">Available Trainers</label>
+                        <select id="trainer" name="trainer" required>
+                            <option value="">Select a trainer</option>
+                            {% for trainer in available_trainers %}
+                            <option value="{{ trainer.id }}">
+                                {{ trainer.user.get_full_name|default:trainer.user.username }} — {{ trainer.specialization }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        {% if available_trainers|length == 0 %}
+                        <p class="empty-state">
+                            No trainers free at this time – try another slot.
+                        </p>
+                        {% endif %}
+                    </div>
+
+                    <button type="submit" name="book_appointment" class="btn-primary full-width">
+                        Confirm Appointment
+                    </button>
+                    {% else %}
+                    <button type="submit" name="check_availability" class="btn-primary full-width">
+                        Check Trainer Availability
+                    </button>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

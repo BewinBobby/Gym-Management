@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block title %}My Appointments | Smart Gym{% endblock %}
+
+{% block content %}
+<section class="page-section">
+    <div class="container">
+        <div class="page-header">
+            <h1>My <span>Appointments</span></h1>
+            <p>Track upcoming sessions and review your training history.</p>
+        </div>
+
+        {% if messages %}
+        <div class="alert-container">
+            {% for message in messages %}
+            <div class="alert {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="appointments-section">
+            <!-- Upcoming Appointments -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Upcoming Sessions</h2>
+                    <a href="{% url 'book_appointment' %}" class="btn-small">+ Book New</a>
+                </div>
+
+                {% if upcoming_appointments %}
+                <ul class="appt-list">
+                    {% for appt in upcoming_appointments %}
+                    <li class="appt-card">
+                        <div class="appt-main">
+                            <div class="appt-date">
+                                <span class="day">{{ appt.appointment_date|date:"d" }}</span>
+                                <span class="month">{{ appt.appointment_date|date:"M" }}</span>
+                            </div>
+                            <div class="appt-info">
+                                <h3>
+                                    {{ appt.trainer.user.get_full_name|default:appt.trainer.user.username }}
+                                </h3>
+                                <p class="sub">
+                                    {{ appt.trainer.specialization }}
+                                </p>
+                                <p class="meta">
+                                    {{ appt.appointment_date|date:"D, d M Y" }} ·
+                                    {{ appt.appointment_date|time:"H:i" }}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="appt-meta">
+                            <span class="status-pill status-{{ appt.status|lower }}">
+                                {{ appt.get_status_display }}
+                            </span>
+                            <span class="fee">₹{{ appt.consultation_fee }}</span>
+
+                            {% if appt.status != 'Cancelled' %}
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="cancel_id" value="{{ appt.id }}">
+                                <button type="submit" class="btn-ghost-small">
+                                    Cancel
+                                </button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="empty-state">
+                    No upcoming appointments yet.
+                    <a href="{% url 'book_appointment' %}">Book your first session</a>.
+                </p>
+                {% endif %}
+            </div>
+
+            <!-- Past Appointments -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Past Sessions</h2>
+                </div>
+
+                {% if past_appointments %}
+                <ul class="appt-list past">
+                    {% for appt in past_appointments %}
+                    <li class="appt-card">
+                        <div class="appt-main">
+                            <div class="appt-date">
+                                <span class="day">{{ appt.appointment_date|date:"d" }}</span>
+                                <span class="month">{{ appt.appointment_date|date:"M" }}</span>
+                            </div>
+                            <div class="appt-info">
+                                <h3>
+                                    {{ appt.trainer.user.get_full_name|default:appt.trainer.user.username }}
+                                </h3>
+                                <p class="sub">
+                                    {{ appt.trainer.specialization }}
+                                </p>
+                                <p class="meta">
+                                    {{ appt.appointment_date|date:"D, d M Y" }} ·
+                                    {{ appt.appointment_date|time:"H:i" }}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="appt-meta">
+                            <span class="status-pill status-{{ appt.status|lower }}">
+                                {{ appt.get_status_display }}
+                            </span>
+                            <span class="fee">₹{{ appt.consultation_fee }}</span>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="empty-state">
+                    You don’t have any past appointments yet.
+                </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,209 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Trainer Dashboard | Smart Gym{% endblock %}
+
+{% block content %}
+<div class="dashboard-wrapper">
+
+    <!-- Page Header -->
+    <section class="dashboard-header">
+        <div>
+            <h2>Trainer Dashboard</h2>
+            <p>Welcome back, <span>{{ trainer.user.first_name|default:trainer.user.username }}</span> 👋</p>
+        </div>
+        <div class="dashboard-header-meta">
+            <span class="tag">Active Trainer</span>
+            <!-- <span class="date">{{ now|default:None }}</span> -->
+        </div>
+    </section>
+
+    <!-- Summary Cards -->
+    <section class="dashboard-summary">
+        <div class="summary-card">
+            <h3>Total Clients</h3>
+            <p class="summary-number">{{ clients|length }}</p>
+            <p class="summary-sub">Members assigned to you</p>
+        </div>
+        <div class="summary-card">
+            <h3>Upcoming Sessions</h3>
+            <p class="summary-number">{{ upcoming_appointments|length }}</p>
+            <p class="summary-sub">Booked in your calendar</p>
+        </div>
+        <div class="summary-card">
+            <h3>Recent Plans</h3>
+            <p class="summary-number">
+                {{ latest_diet_plans|length|add:latest_workout_plans|length }}
+            </p>
+            <p class="summary-sub">Diet & workout plans created</p>
+        </div>
+    </section>
+
+    <div class="dashboard-grid">
+        <!-- Left Column: Appointments -->
+        <section class="dashboard-column">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Upcoming Appointments</h3>
+                </div>
+                <div class="card-body appointments-list">
+                    {% if upcoming_appointments %}
+                    {% for appt in upcoming_appointments %}
+                    <div class="appointment-item">
+                        <div>
+                            <h4>{{ appt.trainee.user.get_full_name|default:appt.trainee.user.username }}</h4>
+                            <p class="muted">
+                                {{ appt.appointment_date|date:"M d, Y" }} at {{ appt.appointment_date|time:"h:i A" }}
+                            </p>
+                            <p class="status-badge status-{{ appt.status|lower }}">
+                                {{ appt.status }}
+                            </p>
+                        </div>
+                        <div class="appointment-actions">
+                            <form method="post" class="inline-form">
+                                {% csrf_token %}
+                                <input type="hidden" name="appointment_id" value="{{ appt.id }}">
+                                <label>
+                                    Status
+                                    <select name="status">
+                                        {% for value, label in status_choices %}
+                                        <option value="{{ value }}" {% if appt.status == value %}selected{% endif %}>
+                                            {{ label }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </label>
+                                <label>
+                                    Reschedule
+                                    <input type="datetime-local" name="appointment_date"
+                                        value="{{ appt.appointment_date|date:'Y-m-d\\TH:i' }}">
+                                </label>
+                                <button type="submit" name="update_appointment" class="btn-primary-sm">
+                                    Update
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <p class="muted">No upcoming appointments.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card card-secondary">
+                <div class="card-header">
+                    <h3>Recent Appointments</h3>
+                </div>
+                <div class="card-body appointments-list small">
+                    {% if past_appointments %}
+                    {% for appt in past_appointments %}
+                    <div class="appointment-item compact">
+                        <div>
+                            <h4>{{ appt.trainee.user.get_full_name|default:appt.trainee.user.username }}</h4>
+                            <p class="muted">
+                                {{ appt.appointment_date|date:"M d, Y" }} • {{ appt.status }}
+                            </p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <p class="muted">No past appointments yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+        <!-- Right Column: Clients & Plan Management -->
+        <section class="dashboard-column">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Your Clients</h3>
+                    <p class="muted">Manage plans for each trainee</p>
+                </div>
+                <div class="card-body clients-list">
+                    {% if clients %}
+                    {% for client in clients %}
+                    <div class="client-card">
+                        <div class="client-info">
+                            <h4>{{ client.user.get_full_name|default:client.user.username }}</h4>
+                            <p class="muted">
+                                {{ client.gender|title|default:"Not specified" }} |
+                                {{ client.phone_number }}
+                            </p>
+
+                            {% if latest_diet_plans.client.id %}
+                            <p> <!-- not valid, so we won't use this, see below note --> </p>
+                            {% endif %}
+
+                            {% if latest_diet_plans.client.id %}
+                            {% endif %}
+
+                            <div class="client-tags">
+                                {% if client.health_conditions %}
+                                    <span class="tag warning">Health Conditions</span>
+                                {% else %}
+                                    <span class="tag success">Healthy</span>
+                                {% endif %}
+                            </div>
+
+                            <div class="client-latest-plans">
+                                {% if client.latest_diet %}
+                                    <p class="latest-plan-label">Latest Diet Plan:</p>
+                                    <p class="latest-plan-text">{{ client.latest_diet.plan_details|truncatechars:80 }}</p>
+                                {% endif %}
+                                
+                                {% if client.latest_workout %}
+                                    <p class="latest-plan-label">Latest Workout Plan:</p>
+                                    <p class="latest-plan-text">{{ client.latest_workout.plan_details|truncatechars:80 }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="client-actions">
+                            <!-- Latest plans display -->
+                            <div class="latest-plans">
+                                {% if latest_diet_plans.client.id %}
+                                {% endif %}
+                            </div>
+
+                            <!-- Add Diet Plan -->
+                            <details class="details-box">
+                                <summary>Add Diet Plan</summary>
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="trainee_id" value="{{ client.id }}">
+                                    <textarea name="plan_details" rows="4"
+                                        placeholder="Enter diet plan details..."></textarea>
+                                    <button type="submit" name="add_diet_plan" class="btn-primary-sm">
+                                        Save Diet Plan
+                                    </button>
+                                </form>
+                            </details>
+
+                            <!-- Add Workout Plan -->
+                            <details class="details-box">
+                                <summary>Add Workout Plan</summary>
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="trainee_id" value="{{ client.id }}">
+                                    <textarea name="plan_details" rows="4"
+                                        placeholder="Enter workout plan details..."></textarea>
+                                    <button type="submit" name="add_workout_plan" class="btn-secondary-sm">
+                                        Save Workout Plan
+                                    </button>
+                                </form>
+                            </details>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <p class="muted">No clients assigned yet. Once appointments are booked with you, they will appear
+                        here.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}

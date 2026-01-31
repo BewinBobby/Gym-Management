@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Checkout - {{ plan_label }} Membership | Smart Gym{% endblock %}
+
+{% block content %}
+    <section class="checkout-section">
+        <div class="checkout-container">
+
+            <!-- LEFT: SUMMARY -->
+            <div class="checkout-summary-card glass-card">
+                <h1>Confirm Your <span>{{ plan_label }}</span> Membership</h1>
+                <p class="checkout-tagline">{{ tagline }}</p>
+
+                <div class="checkout-summary">
+                    <div class="summary-row">
+                        <span>Member</span>
+                        <span>{{ trainee.user.get_full_name|default:trainee.user.username }}</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Plan</span>
+                        <span>{{ plan_label }} ({{ duration_months }} month{% if duration_months|add:'0' > 1 %}s{% endif %})</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Start Date</span>
+                        <span>{{ start_date }}</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>End Date</span>
+                        <span>{{ end_date }}</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total Amount</span>
+                        <span>₹{{ price }}</span>
+                    </div>
+                </div>
+
+                <div class="checkout-note">
+                    <p>
+                        Your membership will be activated immediately after successful payment.
+                        You can manage your plan anytime from your <a href="{% url 'trainee_dashboard' %}">dashboard</a>.
+                    </p>
+                </div>
+            </div>
+
+            <!-- RIGHT: PAYMENT FORM -->
+            <div class="checkout-payment-card glass-card">
+                <div class="payment-header">
+                    <h2>Payment</h2>
+                    <p>This is a demo payment screen. No real money will be charged.</p>
+                </div>
+
+                <form method="post" class="payment-form">
+                    {% csrf_token %}
+
+                    <div class="form-row">
+                        <label>Cardholder Name</label>
+                        <input type="text" name="card_name" placeholder="John Doe" required>
+                    </div>
+
+                    <div class="form-row">
+                        <label>Card Number</label>
+                        <input type="text" name="card_number" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                    </div>
+
+                    <div class="form-row-two">
+                        <div class="form-field">
+                            <label>Expiry</label>
+                            <input type="text" name="expiry" placeholder="MM/YY" maxlength="5" required>
+                        </div>
+                        <div class="form-field">
+                            <label>CVV</label>
+                            <input type="password" name="cvv" placeholder="***" maxlength="4" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary full-width">
+                        Pay ₹{{ price }} & Activate Membership
+                    </button>
+
+                    <a href="{% url 'membership_plans' %}" class="btn-ghost full-width back-link">
+                        ← Back to Plans
+                    </a>
+                </form>
+
+                <div class="payment-security-text">
+                    <span class="dot"></span>
+                    Test mode only – cards are not actually processed.
+                </div>
+            </div>
+
+        </div>
+    </section>
+{% endblock %}

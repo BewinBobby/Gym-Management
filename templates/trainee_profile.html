@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile | Smart Gym{% endblock %}
+
+{% block content %}
+<div class="profile-page">
+
+    <div class="profile-header-card glass-card">
+        <div class="profile-avatar">
+            <div class="avatar-circle">
+                {{ trainee.user.first_name|first|default:trainee.user.username|first }}
+            </div>
+        </div>
+        <div class="profile-main-info">
+            <h2>{{ trainee.user.first_name }} {{ trainee.user.last_name }}</h2>
+            <p class="username">@{{ trainee.user.username }}</p>
+            <p class="email">{{ trainee.user.email }}</p>
+
+            {% if active_membership %}
+            <span class="membership-badge membership-{{ active_membership.membership_type }}">
+                {{ active_membership.get_membership_type_display }} Member
+            </span>
+            <p class="membership-dates">
+                Active from {{ active_membership.start_date }} to {{ active_membership.end_date }}
+            </p>
+            {% if active_membership.trainer %}
+            <p class="profile-trainer">
+                Personal Trainer:
+                <strong>{{ active_membership.trainer.user.first_name }} {{ active_membership.trainer.user.last_name
+                    }}</strong>
+            </p>
+            {% endif %}
+            {% else %}
+            <span class="membership-badge membership-none">
+                No active membership
+            </span>
+            <p class="membership-cta">
+                <a href="{% url 'membership_plans' %}" class="btn-primary">Choose a Membership</a>
+            </p>
+            {% endif %}
+        </div>
+
+        <div class="profile-stats">
+            <div class="stat-pill">
+                <span class="stat-label">Total Appointments</span>
+                <span class="stat-value">{{ total_appointments }}</span>
+            </div>
+            <div class="stat-pill">
+                <span class="stat-label">Completed Sessions</span>
+                <span class="stat-value">{{ completed_appointments }}</span>
+            </div>
+            <div class="stat-pill">
+                <span class="stat-label">Diet Plans</span>
+                <span class="stat-value">{{ trainee.dietplan_set.count }}</span>
+            </div>
+            <div class="stat-pill">
+                <span class="stat-label">Workout Plans</span>
+                <span class="stat-value">{{ trainee.workoutplan_set.count }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="profile-grid">
+        <!-- Personal Details -->
+        <section class="profile-card glass-card">
+            <h3>Personal Details</h3>
+            <div class="profile-detail-row">
+                <span class="label">Full Name</span>
+                <span class="value">{{ trainee.user.first_name }} {{ trainee.user.last_name }}</span>
+            </div>
+            <div class="profile-detail-row">
+                <span class="label">Username</span>
+                <span class="value">@{{ trainee.user.username }}</span>
+            </div>
+            <div class="profile-detail-row">
+                <span class="label">Email</span>
+                <span class="value">{{ trainee.user.email }}</span>
+            </div>
+            <div class="profile-detail-row">
+                <span class="label">Phone</span>
+                <span class="value">{{ trainee.phone_number }}</span>
+            </div>
+            <div class="profile-detail-row">
+                <span class="label">Date of Birth</span>
+                <span class="value">{{ trainee.dob|default:"-" }}</span>
+            </div>
+            <div class="profile-detail-row">
+                <span class="label">Gender</span>
+                <span class="value">{{ trainee.gender|default:"-" }}</span>
+            </div>
+        </section>
+
+        <!-- Health Details -->
+        <section class="profile-card glass-card">
+            <h3>Health & Medical Info</h3>
+            <div class="profile-detail-row">
+                <span class="label">Any Health Conditions?</span>
+                <span class="value">
+                    {% if trainee.health_conditions %}Yes{% else %}No{% endif %}
+                </span>
+            </div>
+            <div class="profile-detail-row health-notes">
+                <span class="label">Details</span>
+                <span class="value">
+                    {% if trainee.health_details %}
+                    {{ trainee.health_details }}
+                    {% else %}
+                    <span class="muted">No additional health details provided.</span>
+                    {% endif %}
+                </span>
+            </div>
+        </section>
+
+        <!-- Latest Plans -->
+        <section class="profile-card glass-card">
+            <h3>Latest Diet Plan</h3>
+            {% if latest_diet_plan %}
+            <p class="plan-date">Created on {{ latest_diet_plan.created_at|date:"M d, Y" }}</p>
+            <div class="plan-box">
+                {{ latest_diet_plan.plan_details|linebreaksbr }}
+            </div>
+            {% else %}
+            <p class="muted">No diet plan assigned yet.</p>
+            {% endif %}
+        </section>
+
+        <section class="profile-card glass-card">
+            <h3>Latest Workout Plan</h3>
+            {% if latest_workout_plan %}
+            <p class="plan-date">Created on {{ latest_workout_plan.created_at|date:"M d, Y" }}</p>
+            <div class="plan-box">
+                {{ latest_workout_plan.plan_details|linebreaksbr }}
+            </div>
+            {% else %}
+            <p class="muted">No workout plan assigned yet.</p>
+            {% endif %}
+        </section>
+
+        <!-- Upcoming appointments -->
+        <section class="profile-card glass-card profile-appointments">
+            <h3>Upcoming Appointments</h3>
+            {% if upcoming_appointments %}
+            <ul class="appointment-list">
+                {% for appointment in upcoming_appointments %}
+                <li class="appointment-item">
+                    <div>
+                        <p class="appointment-trainer">
+                            With <strong>{{ appointment.trainer.user.first_name }} {{ appointment.trainer.user.last_name }}</strong>
+                        </p>
+                        <p class="appointment-date">
+                            {{ appointment.appointment_date|date:"M d, Y - H:i" }}
+                        </p>
+                    </div>
+                    <span class="status-pill status-{{ appointment.status|lower }}">
+                        {{ appointment.status }}
+                    </span>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <p class="muted">No upcoming appointments scheduled.</p>
+            {% endif %}
+            <div class="appointments-actions">
+                <a href="{% url 'view_appointments' %}" class="btn-outline">View All</a>
+                <a href="{% url 'book_appointment' %}" class="btn-primary">Book New</a>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}

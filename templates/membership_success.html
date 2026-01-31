@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Membership Activated | Smart Gym{% endblock %}
+
+{% block content %}
+<section class="payment-success-section">
+    <div class="payment-success-card">
+        <div class="success-icon">✔</div>
+        <h1>Payment Successful!</h1>
+        <p>Your <strong>{{ membership.get_membership_type_display }}</strong> membership is now active.</p>
+
+        <div class="success-summary">
+            <div class="summary-row">
+                <span>Member</span>
+                <span>{{ membership.trainee.user.get_full_name|default:membership.trainee.user.username }}</span>
+            </div>
+            <div class="summary-row">
+                <span>Plan</span>
+                <span>{{ membership.get_membership_type_display }}</span>
+            </div>
+            <div class="summary-row">
+                <span>Validity</span>
+                <span>{{ membership.start_date }} → {{ membership.end_date }}</span>
+            </div>
+            <div class="summary-row">
+                <span>Amount Paid</span>
+                <span>₹{{ membership.amount }}</span>
+            </div>
+        </div>
+
+        <div class="success-actions">
+            <a href="{% url 'trainee_dashboard' %}" class="btn-primary">
+                Go to Dashboard
+            </a>
+            <!-- <a href="{% url 'membership_plans' %}" class="btn-ghost">
+                View Other Plans
+            </a> -->
+        </div>
+    </div>
+</section>
+{% endblock %}

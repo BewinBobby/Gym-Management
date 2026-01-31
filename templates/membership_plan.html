@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block title %}Membership Plans | Smart Gym{% endblock %}
+
+{% block content %}
+<section class="membership-section">
+    <div class="membership-header">
+        <h1>Choose Your <span>Membership</span></h1>
+        <p>Flexible plans for every fitness journey — from beginners to athletes.</p>
+    </div>
+
+    <div class="membership-grid">
+        <!-- SILVER PLAN -->
+        <div class="plan-card silver">
+            <div class="plan-badge">Starter</div>
+            <div class="plan-name">Silver</div>
+            <div class="plan-subtitle">Perfect if you're just starting out</div>
+
+            <div class="plan-price">
+                <div class="plan-price-main">₹1,999<span>/month</span></div>
+                <div class="plan-billing">Billed monthly · Access during regular hours</div>
+            </div>
+
+            <ul class="plan-features">
+                <li>✔ Full access to gym floor & machines</li>
+                <li>✔ Locker & shower access</li>
+                <li>✔ One complimentary fitness assessment</li>
+                <li>✔ Access to basic group classes (Mon–Fri)</li>
+            </ul>
+
+            <div class="plan-subpricing">
+                <h4>Add-ons</h4>
+                <div class="plan-subpricing-row">
+                    <span>Personal Training (per session)</span>
+                    <span>₹800</span>
+                </div>
+                <div class="plan-subpricing-row">
+                    <span>Diet Plan (monthly)</span>
+                    <span>₹1,000</span>
+                </div>
+            </div>
+
+            <div class="plan-cta">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'membership_checkout' 'silver' %}">Choose Silver</a>
+                {% else %}
+                    <a href="{% url 'register_trainee' %}">Join Silver</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- GOLD PLAN -->
+        <div class="plan-card gold">
+            <div class="plan-badge">Popular</div>
+            <div class="plan-name">Gold</div>
+            <div class="plan-subtitle">For regular gym-goers who want more</div>
+
+            <div class="plan-price">
+                <div class="plan-price-main">₹2,999<span>/month</span></div>
+                <div class="plan-billing">Includes extended hours & premium classes</div>
+            </div>
+
+            <ul class="plan-features">
+                <li>✔ 24/7 gym access</li>
+                <li>✔ All group classes included (HIIT, Yoga, Spin)</li>
+                <li>✔ Monthly body composition analysis</li>
+                <li>✔ Priority locker allocation</li>
+            </ul>
+
+            <div class="plan-subpricing">
+                <h4>Add-ons</h4>
+                <div class="plan-subpricing-row">
+                    <span>Personal Training (per session)</span>
+                    <span>₹700</span>
+                </div>
+                <div class="plan-subpricing-row">
+                    <span>Diet Plan (monthly)</span>
+                    <span>₹900</span>
+                </div>
+            </div>
+
+            <div class="plan-cta">
+                {% if user.is_authenticated %}
+                <a href="{% url 'membership_checkout' 'gold' %}">Choose Gold</a>
+                {% else %}
+                <a href="{% url 'register_trainee' %}">Join Gold</a>
+                {% endif %}
+            </div>
+
+        </div>
+
+        <!-- PLATINUM PLAN -->
+        <div class="plan-card platinum">
+            <div class="plan-badge">Elite</div>
+            <div class="plan-name">Platinum</div>
+            <div class="plan-subtitle">For serious athletes & transformation goals</div>
+
+            <div class="plan-price">
+                <div class="plan-price-main">₹4,499<span>/month</span></div>
+                <div class="plan-billing">Includes VIP perks & coaching benefits</div>
+            </div>
+
+            <ul class="plan-features">
+                <li>✔ 24/7 gym access + VIP training zone</li>
+                <li>✔ Unlimited premium classes</li>
+                <li>✔ Dedicated coach check-ins (bi-weekly)</li>
+                <li>✔ Priority booking for PT & nutrition</li>
+            </ul>
+
+            <div class="plan-subpricing">
+                <h4>Included Extras</h4>
+                <div class="plan-subpricing-row">
+                    <span>Personal Training</span>
+                    <span>₹600 / session</span>
+                </div>
+                <div class="plan-subpricing-row">
+                    <span>Diet Plan</span>
+                    <span>Included (customised)</span>
+                </div>
+            </div>
+
+            <div class="plan-cta">
+                {% if user.is_authenticated %}
+                <a href="{% url 'membership_checkout' 'platinum' %}">Choose Platinum</a>
+                {% else %}
+                <a href="{% url 'register_trainee' %}">Join Platinum</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
